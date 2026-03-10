@@ -29,10 +29,10 @@ public class Room
 // Entrance and Exit room
 public class GateRoom : Room
 {
-    public GateRoom() : base("birds idly chirping outside, and a soft hiss from the roiling wall of darkness ahead.\nMaybe that's just your imagination.",
-                             "stale air from the cavern with a hint of fresh air from above.",
+    public GateRoom() : base("birds happily chirping outside, and a soft hissing noise. Maybe that's your imagination.",
+                             "stale cavern air mixing with fresh air from above.",
                              [Map.Direction.South]) 
-                             => _sight = "the cavern room illuminated by the sunlight coming through the hole you descended into the cavern from.";
+                             => _sight = "the sunlit entrance to the cavern, a roiling wall of darkness covers the only passage further.";
 }
 
 public class FountainRoom : Room

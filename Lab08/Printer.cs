@@ -22,13 +22,13 @@ public static class Printer
     public static void OpeningCrawl()
     {
         Console.Clear();
-        ColorPrint(TextType.Descriptive, "You enter the ");
+        ColorPrint(TextType.Descriptive, "You descend into the ");
         ColorPrint(TextType.Enemy, "Cavern of Objects");
         ColorPrint(TextType.Descriptive, ", a maze of rooms with ");
         ColorPrint(TextType.Enemy, "dangerous pits");
         ColorPrint(TextType.Descriptive, " in search of the ");
-        ColorPrint(TextType.Fountain, "Fountain of Objects\n");
-        ColorPrint(TextType.Entrance, "Light is visible only here, in the entrance,");
+        ColorPrint(TextType.Fountain, "Fountain of Objects.\n");
+        ColorPrint(TextType.Entrance, "Light is visible only here, in the entrance, ");
         ColorPrint(TextType.Enemy, "a roiling wall of darkness covers the passage to the rest of the cavern.\n");
         ColorPrint(TextType.Descriptive, "You must navigate the Cavern with your other senses.\n");
         ColorPrint(TextType.Descriptive, "Find the ");
