@@ -6,11 +6,12 @@ using Lab08;
 Map cavernMap = new();
 Player player = new(cavernMap);
 
-Console.WriteLine("welcome message\npress any key to begin");
+Printer.OpeningCrawl();
 Console.ReadKey(true);
+
 (Printer.TextType textType, string lastActionString) lastAction = (Printer.TextType.Enemy, "You've entered the Cavern of Objects...");
-string wallBonk = "You bump into a wall of the cavern, you can't go that way.";
 bool fountainIsOn = false;
+
 while (true)
 {
     Console.Clear();
@@ -36,28 +37,28 @@ while (true)
         case "north":
         case "n":
         case "up":
-            lastAction = player.MoveNorth() ? (Printer.TextType.Narrative, "You walk to the North...") : (Printer.TextType.Descriptive, wallBonk);
+            lastAction = player.MoveNorth() ? (Printer.TextType.Narrative, "You walk to the North...") : (Printer.TextType.Descriptive, Printer.wallBonk);
             break;
         case "walk east":
         case "move east":
         case "east":
         case "e":
         case "right":
-            lastAction = player.MoveEast() ? (Printer.TextType.Narrative, "You walk to the East...") : (Printer.TextType.Descriptive, wallBonk);
+            lastAction = player.MoveEast() ? (Printer.TextType.Narrative, "You walk to the East...") : (Printer.TextType.Descriptive, Printer.wallBonk);
             break;
         case "walk south":
         case "move south":
         case "south":
         case "s":
         case "down":
-            lastAction = player.MoveSouth() ? (Printer.TextType.Narrative, "You walk to the South...") : (Printer.TextType.Descriptive, wallBonk);
+            lastAction = player.MoveSouth() ? (Printer.TextType.Narrative, "You walk to the South...") : (Printer.TextType.Descriptive, Printer.wallBonk);
             break;
         case "walk west":
         case "move west":
         case "west":
         case "w":
         case "left":
-            lastAction = player.MoveWest() ? (Printer.TextType.Narrative, "You walk to the West...") : (Printer.TextType.Descriptive, wallBonk);
+            lastAction = player.MoveWest() ? (Printer.TextType.Narrative, "You walk to the West...") : (Printer.TextType.Descriptive, Printer.wallBonk);
             break;
         case "enable":
         case "toggle":
@@ -72,6 +73,9 @@ while (true)
             }
             else
                 lastAction = (Printer.TextType.Descriptive, "You can't enable the Fountain until you're in the room with it!");
+            break;
+        case "help":
+            Printer.HelpMenu();
             break;
         case "leave":
         case "exit":
@@ -97,7 +101,7 @@ while (true)
     if (player.CurrentRoom is GateRoom && fountainIsOn)
         break;
 }
-
+Console.Clear();
 Printer.ColorPrint(Printer.TextType.Entrance, "You've done it! The ");
 Printer.ColorPrint(Printer.TextType.Fountain, "Fountain of Objects");
 Printer.ColorPrint(Printer.TextType.Entrance, " has been activated and you've escaped with your life! Good job!");
