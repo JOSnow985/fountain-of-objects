@@ -98,4 +98,6 @@ while (true)
         break;
 }
 
-Console.WriteLine("win text");
+Printer.ColorPrint(Printer.TextType.Entrance, "You've done it! The ");
+Printer.ColorPrint(Printer.TextType.Fountain, "Fountain of Objects");
+Printer.ColorPrint(Printer.TextType.Entrance, " has been activated and you've escaped with your life! Good job!");
