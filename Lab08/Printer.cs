@@ -42,7 +42,7 @@ public static class Printer
         ColorPrint(TextType.Fountain, "Fountain of Objects");
         ColorPrint(TextType.Descriptive, ", activate it, and return to the entrance.");
         ColorPrint(TextType.Entrance, "\n\nYou can use \"help\" to see the controls!");
-        // ColorPrint(TextType.Descriptive, "\nLook out for pits. You will feel a breeze if a pit is in an adjacent room. If you enter a room with a pit, you will surely die.");
+        ColorPrint(TextType.Descriptive, "\nLook out for pits. You will hear a breeze if a pit is in an adjacent room. If you enter a room with a pit, you will surely die.");
         // ColorPrint(TextType.Descriptive, "\nMaelstroms are violent forces of sentient wind. Entering a room with one could transport you to any other location in the caverns. You will be able to hear their growling and groaning in nearby rooms.");
         // ColorPrint(TextType.Descriptive, "\nAmaroks roam the caverns. Encountering one is certain death, but you can smell their rotten stench from nearby rooms.");
         // ColorPrint(TextType.Descriptive, "\nYou carry with you a bow and a quiver of arrows. You can use them to shoot monsters in the caverns but be warned: you have a limited supply.");

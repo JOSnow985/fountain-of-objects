@@ -5,8 +5,23 @@ public class Player
     // Player starts from 0, 0, top left corner.
     public int X = 0;
     public int Y = 0;
+    public bool Dead = false;
     private readonly Map Map;
     public Room CurrentRoom => Map.Layout[Y][X];
+    public bool NearPit
+    {
+        get
+        {
+            foreach (Pit pit in Map.MapPits)
+            {
+                if (Math.Abs(X - pit.X) <= 1 && Math.Abs(Y - pit.Y) <= 1)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+    }
 
     // Need a map for the player to be on from the constructor
     public Player(Map selectedMap) { Map = selectedMap; }

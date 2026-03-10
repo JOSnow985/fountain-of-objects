@@ -21,8 +21,8 @@ while (true)
         }
     }
 }
-Map cavernMap = new(mapSelect);
-Player player = new(cavernMap);
+Map map = new(mapSelect);
+Player player = new(map);
 
 Printer.OpeningCrawl();
 Console.ReadKey(true);
@@ -39,8 +39,11 @@ while (true)
 
     Console.Write("You see ");
     Printer.ColorPrint(player.CurrentRoom is GateRoom ? Printer.TextType.Entrance : Printer.TextType.Narrative, $"{player.Look()}\n");
+
     Console.Write("You hear ");
-    Printer.ColorPrint(player.CurrentRoom is FountainRoom ? Printer.TextType.Fountain : Printer.TextType.Narrative, $"{player.Sound()}\n");
+    string weHear = $"{(player.Sound() == "the sound of silence." && player.NearPit ? "wind whispering quietly, a pit is likely to be close by." : player.Sound())}";
+    Printer.ColorPrint(player.CurrentRoom is FountainRoom ? Printer.TextType.Fountain : Printer.TextType.Narrative, $"{weHear}\n");
+    
     Console.Write("You smell ");
     Printer.ColorPrint(Printer.TextType.Narrative, $"{player.Smell()}\n");
 
@@ -118,8 +121,20 @@ while (true)
     // Check if we've won...
     if (player.CurrentRoom is GateRoom && fountainIsOn)
         break;
+    // Or if we've lost...
+    foreach (Pit pit in map.MapPits)
+    {
+        if (player.X == pit.X && player.Y == pit.Y)
+            pit.TripPlayer(player);
+    }
+    
+    if (player.Dead)
+        break;
 }
-Console.Clear();
-Printer.ColorPrint(Printer.TextType.Entrance, "You've done it! The ");
-Printer.ColorPrint(Printer.TextType.Fountain, "Fountain of Objects");
-Printer.ColorPrint(Printer.TextType.Entrance, " has been activated and you've escaped with your life! Good job!");
+if (!player.Dead)
+{
+    Console.Clear();
+    Printer.ColorPrint(Printer.TextType.Entrance, "You've done it! The ");
+    Printer.ColorPrint(Printer.TextType.Fountain, "Fountain of Objects");
+    Printer.ColorPrint(Printer.TextType.Entrance, " has been activated and you've escaped with your life! Good job!");
+}
