@@ -29,9 +29,9 @@ public class Room
 // Entrance and Exit room
 public class GateRoom : Room
 {
-    public GateRoom() : base("birds happily chirping outside, and a soft hissing noise. Maybe that's your imagination.",
+    public GateRoom(List<Map.Direction> exits) : base("birds happily chirping outside, and a soft hissing noise. Maybe that's your imagination.",
                              "stale cavern air mixing with fresh air from above.",
-                             [Map.Direction.South]) 
+                             exits) 
                              => _sight = "the sunlit entrance to the cavern, a roiling wall of darkness covers the only passage further.";
 }
 
@@ -39,7 +39,7 @@ public class FountainRoom : Room
 {
     public bool _fountainEnabled = false;
     public override string Sound => _fountainEnabled ? "You hear the rushing waters from the Fountain of Objects. It has been reactivated!" : _sound;    // If the fountain is enabled, we return a different sound. 
-    public FountainRoom() : base("water dripping in this room. The Fountain of Objects is here!", "something damp, apparently mold still grows in the Cavern of Objects.", [Map.Direction.East, Map.Direction.West]) {}
+    public FountainRoom(List<Map.Direction> exits) : base("water dripping in this room. The Fountain of Objects is here!", "something damp, apparently mold still grows in the Cavern of Objects.", exits) {}
 
     public void ToggleFountain() => _fountainEnabled = !_fountainEnabled;
 }

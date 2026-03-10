@@ -19,6 +19,13 @@ public static class Printer
         Console.Write(message);
         Console.ForegroundColor = ConsoleColor.White;   // Return to white after writing
     }
+    public static void MapSelect()
+    {
+        Console.Clear();
+        Console.WriteLine("You're nearing the Cavern of Objects, how big do you expect the cavern to be?");
+        ColorPrint(TextType.Input, "Small   Medium   Large\n");
+        Console.WriteLine("Enter a selection to continue...");
+    }
     public static void OpeningCrawl()
     {
         Console.Clear();

@@ -2,8 +2,26 @@
 using Lab08;
 
 // To Do: map size select
-
-Map cavernMap = new();
+Printer.MapSelect();
+string mapSelect = "small";
+while (true)
+{
+    string userInput = Console.ReadLine()!;
+    if (userInput is not null)
+    {
+        userInput = userInput.ToLowerInvariant();
+        if (userInput == "large" || userInput == "medium" || userInput == "small")
+        {
+            mapSelect = userInput;
+            break;
+        }
+        else
+        {
+            Console.WriteLine("Please enter a map size selection!");
+        }
+    }
+}
+Map cavernMap = new(mapSelect);
 Player player = new(cavernMap);
 
 Printer.OpeningCrawl();
