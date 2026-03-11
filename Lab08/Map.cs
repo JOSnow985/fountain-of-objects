@@ -29,7 +29,7 @@ public class Map
         ["N",   "E",    "NW",   "N"]
     ],
     [ Amarok.At(3, 0), Maelstrom.At(1, 3), Pit.At(3, 3) ],
-    [ (Entrance, 0, 0), (Fountain, 0, 2) ]
+    [ (Entrance, 0, 0), (Fountain, 2, 0) ]
     );
     // Medium maps are 6x6, have 2 Amaroks, 1 Maelstrom, 2 Pits
     private static (List<List<string>> exits, List<Obstacle> obstacles, List<(Room, int x, int y)> rooms) mediumMap = (

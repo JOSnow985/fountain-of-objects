@@ -1,4 +1,6 @@
 ﻿namespace Lab08;
+using System.Linq;
+using System.Text;
 
 public class Player
 {
@@ -7,27 +9,27 @@ public class Player
     public int Y = 0;
     public bool Dead = false;
     private readonly Map Map;
-    public Room CurrentRoom => 
-    //Map.RoomList.Contains((Map.Entrance, X, Y)) ? Map.Entrance : ;
-    public bool NearPit
-    {
-        get
-        {
-            foreach (Pit pit in Map.MapPits)
-            {
-                if (Math.Abs(X - pit.X) <= 1 && Math.Abs(Y - pit.Y) <= 1)
-                {
-                    return true;
-                }
-            }
-            return false;
-        }
-    }
 
-    // Need a map for the player to be on from the constructor
+    // Checks if any room in the room list has matching coordinates to us, returns an empty room if not.
+    public Room CurrentRoom => Map.RoomList.Any(tuple => (tuple.x, tuple.y) == (X, Y)) ? Map.RoomList.First(tuple => (tuple.x, tuple.y) == (X, Y)).room : Map.EmptyRoom;
+
     public Player(Map selectedMap) { Map = selectedMap; }
 
-    public string Sense() => CurrentRoom.Sight;     // Returns a string based on where the player is and what they're close to
+    public string Sense()        // Returns a string based on where the player is and what they're close to
+    {
+        StringBuilder weSenseThis = new();
+
+        weSenseThis.Append(CurrentRoom.Feedback);       // May be nothing, might be Gate or Fountain Room feedback
+
+        foreach (Obstacle obstacle in Map.ObstaclesList)
+        {
+            if (Math.Abs(X - obstacle.X) <= 1 && Math.Abs(Y - obstacle.Y) <= 1)
+                weSenseThis.Append(obstacle.Feedback);      // If an obstacle is near, we retrieve the string for it's feedback
+        }
+
+        return weSenseThis.ToString();
+    }
+
     public bool Move(char dir)
     {
         if (!Map.ExitsList[Y][X].Contains(dir))
@@ -53,5 +55,4 @@ public class Player
             }
         }
     }
-    // public bool MoveCheck(Map.Direction dir) => CurrentRoom.Exits.Contains(dir);
 }

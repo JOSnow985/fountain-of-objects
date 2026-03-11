@@ -3,7 +3,6 @@ using Lab08;
 
 Printer.MapSelect();
 
-string mapSelect = "small";
 Map map;
 while (true)
 {
@@ -13,7 +12,7 @@ while (true)
         userInput = userInput.ToLowerInvariant();
         if (userInput == "large")
         {
-           map = Map.Medium;
+           map = Map.Large;
             break;
         }
         else if (userInput == "medium")
@@ -23,7 +22,7 @@ while (true)
         }
         else if (userInput == "small")
         {
-            map = Map.Medium;
+            map = Map.Small;
             break;
         }
         else
@@ -38,27 +37,16 @@ Player player = new(map);
 Printer.OpeningCrawl();
 Console.ReadKey(true);
 
-(Printer.TextType textType, string lastActionString) lastAction = (Printer.TextType.Enemy, "You've entered the Cavern of Objects...");
-bool fountainIsOn = false;
+string lastAction = "You've entered the Cavern of Objects...";
 
 while (true)
 {
     Console.Clear();
     Console.WriteLine($"Currently at: ({player.X},{player.Y})");
 
-    Printer.ColorPrint(lastAction.textType, $"{lastAction.lastActionString}\n");
+    Printer.ColorPrint(lastAction);
 
-    Console.WriteLine();
-
-    // Console.Write("You see ");
-    // Printer.ColorPrint(player.CurrentRoom is GateRoom ? Printer.TextType.Entrance : Printer.TextType.Narrative, $"{player.Look()}\n");
-
-    // Console.Write("You hear ");
-    // string weHear = $"{(player.Sound() == "the sound of silence." && player.NearPit ? "wind whispering quietly, a pit is likely to be close by." : player.Sound())}";
-    // Printer.ColorPrint(player.CurrentRoom is FountainRoom ? Printer.TextType.Fountain : Printer.TextType.Narrative, $"{weHear}\n");
-    
-    // Console.Write("You smell ");
-    // Printer.ColorPrint(Printer.TextType.Narrative, $"{player.Smell()}\n");
+    Printer.ColorPrint(player.Sense());
 
     Console.WriteLine("\nWhat's your next move?");
 
@@ -71,28 +59,28 @@ while (true)
         case "north":
         case "n":
         case "up":
-            lastAction = player.Move('N') ? (Printer.TextType.Narrative, "You walk to the North...") : (Printer.TextType.Descriptive, Printer.wallBonk);
+            lastAction = player.Move('N') ? "You walk to the North..." : Printer.wallBonk;
             break;
         case "walk east":
         case "move east":
         case "east":
         case "e":
         case "right":
-            lastAction = player.Move('E') ? (Printer.TextType.Narrative, "You walk to the East...") : (Printer.TextType.Descriptive, Printer.wallBonk);
+            lastAction = player.Move('E') ? "You walk to the East..." : Printer.wallBonk;
             break;
         case "walk south":
         case "move south":
         case "south":
         case "s":
         case "down":
-            lastAction = player.Move('S') ? (Printer.TextType.Narrative, "You walk to the South...") : (Printer.TextType.Descriptive, Printer.wallBonk);
+            lastAction = player.Move('S') ? "You walk to the South..." : Printer.wallBonk;
             break;
         case "walk west":
         case "move west":
         case "west":
         case "w":
         case "left":
-            lastAction = player.Move('W') ? (Printer.TextType.Narrative, "You walk to the West...") : (Printer.TextType.Descriptive, Printer.wallBonk);
+            lastAction = player.Move('W') ? "You walk to the West..." : Printer.wallBonk;
             break;
         case "enable":
         case "toggle":
@@ -100,13 +88,13 @@ while (true)
         case "activate":
         case "use":
         case "fountain":
-            if (player.CurrentRoom is FountainRoom fountainRoom)
+            if (player.CurrentRoom is FountainRoom)
             {
-                fountainRoom._fountainEnabled = fountainIsOn = !fountainRoom._fountainEnabled;
-                lastAction = fountainRoom._fountainEnabled ? (Printer.TextType.Fountain, "You have enabled the Fountain of Objects!") : (Printer.TextType.Enemy, "You have disabled the Fountain of Objects... why?");
+                Map.Fountain.ToggleFountain();
+                lastAction = Map.Fountain.IsFountainEnabled ? "You have activated the Fountain of Objects!" : "You have deactivated the Fountain of Objects... why?";
             }
             else
-                lastAction = (Printer.TextType.Descriptive, "You can't enable the Fountain until you're in the room with it!");
+                lastAction = "There's nothing to enable here...";
             break;
         case "help":
             Printer.HelpMenu();
@@ -118,27 +106,27 @@ while (true)
             if (player.CurrentRoom is GateRoom)
             {
                 Console.Clear();
-                Printer.ColorPrint(Printer.TextType.Enemy, "You decide this is too much and ascend out of the Cavern of Objects. The Uncoded One will probably win now. Nice.");
+                Printer.ColorPrint("You decide this is too much and ascend out of the Cavern of Objects. The Uncoded One will probably win now. Nice.");
                 return;
             }
             else
-                lastAction = (Printer.TextType.Descriptive, "You can't leave unless you're at the entrance...");
+                lastAction = "You can't leave unless you're at the entrance...";
             break;
         default:
-            lastAction = (Printer.TextType.Descriptive, "The Rules of the Cavern prevent you from doing... that.");
+            lastAction = "The Rules of the Cavern prevent you from doing... that.";
             break;
     }
     // Return text color to white just in case
     Console.ForegroundColor = ConsoleColor.White;
 
-    // Check if we've won...
-    if (player.CurrentRoom is GateRoom && fountainIsOn)
+    // Check if we've won first
+    if (player.CurrentRoom is GateRoom && Map.Fountain.IsFountainEnabled)
         break;
-    // Or if we've lost...
-    foreach (Pit pit in map.MapPits)
+    // Then if something bad is happening
+    foreach (Obstacle obstacle in map.ObstaclesList)
     {
-        if (player.X == pit.X && player.Y == pit.Y)
-            pit.TripPlayer(player);
+        if (player.X == obstacle.X && player.Y == obstacle.Y)
+            obstacle.TripPlayer(player);
     }
     
     if (player.Dead)
@@ -147,7 +135,5 @@ while (true)
 if (!player.Dead)
 {
     Console.Clear();
-    Printer.ColorPrint(Printer.TextType.Entrance, "You've done it! The ");
-    Printer.ColorPrint(Printer.TextType.Fountain, "Fountain of Objects");
-    Printer.ColorPrint(Printer.TextType.Entrance, " has been activated and you've escaped with your life! Good job!");
+    Printer.ColorPrint("You've done it! The Fountain of Objects has been activated and you've escaped with your life! Good job!");
 }
