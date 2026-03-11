@@ -7,7 +7,8 @@ public class Player
     public int Y = 0;
     public bool Dead = false;
     private readonly Map Map;
-    public Room CurrentRoom => Map.Layout[Y][X];
+    public Room CurrentRoom => 
+    //Map.RoomList.Contains((Map.Entrance, X, Y)) ? Map.Entrance : ;
     public bool NearPit
     {
         get
@@ -26,48 +27,30 @@ public class Player
     // Need a map for the player to be on from the constructor
     public Player(Map selectedMap) { Map = selectedMap; }
 
-    // Our senses retrieve info from the room we're currently in
-    public string Look() => CurrentRoom.Sight;
-    public string Smell() => CurrentRoom.Scent;
-    public string Sound() => CurrentRoom.Sound;
-    public bool MoveNorth()
+    public string Sense() => CurrentRoom.Sight;     // Returns a string based on where the player is and what they're close to
+    public bool Move(char dir)
     {
-        if (!CurrentRoom.Exits.Contains(Map.Direction.North))
+        if (!Map.ExitsList[Y][X].Contains(dir))
             return false;
         else
         {
-            Y--;
-            return true;
-        }
-    }
-    public bool MoveEast()
-    {
-        if (!CurrentRoom.Exits.Contains(Map.Direction.East))
-            return false;
-        else
-        {
-            X++;
-            return true;
-        }
-    }
-    public bool MoveSouth()
-    {
-        if (!CurrentRoom.Exits.Contains(Map.Direction.South))
-            return false;
-        else
-        {
-            Y++;
-            return true;
-        }
-    }
-    public bool MoveWest()
-    {
-        if (!CurrentRoom.Exits.Contains(Map.Direction.West)) 
-            return false;
-        else
-        {
-            X--;
-            return true;
+            switch (dir)
+            {
+                case 'N':
+                    Y--;
+                    return true;
+                case 'E':
+                    X++;
+                    return true;
+                case 'S':
+                    Y++;
+                    return true;
+                case 'W':
+                    X--;
+                    return true;
+                default:
+                    return false;
+            }
         }
     }
     // public bool MoveCheck(Map.Direction dir) => CurrentRoom.Exits.Contains(dir);

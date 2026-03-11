@@ -1,18 +1,29 @@
 ﻿// Jaden Olvera     CS-1410    Fountain of Objects for HW:23
 using Lab08;
 
-// To Do: map size select
 Printer.MapSelect();
+
 string mapSelect = "small";
+Map map;
 while (true)
 {
     string userInput = Console.ReadLine()!;
     if (userInput is not null)
     {
         userInput = userInput.ToLowerInvariant();
-        if (userInput == "large" || userInput == "medium" || userInput == "small")
+        if (userInput == "large")
         {
-            mapSelect = userInput;
+           map = Map.Medium;
+            break;
+        }
+        else if (userInput == "medium")
+        {
+            map = Map.Medium;
+            break;
+        }
+        else if (userInput == "small")
+        {
+            map = Map.Medium;
             break;
         }
         else
@@ -21,7 +32,7 @@ while (true)
         }
     }
 }
-Map map = new(mapSelect);
+
 Player player = new(map);
 
 Printer.OpeningCrawl();
@@ -37,15 +48,17 @@ while (true)
 
     Printer.ColorPrint(lastAction.textType, $"{lastAction.lastActionString}\n");
 
-    Console.Write("You see ");
-    Printer.ColorPrint(player.CurrentRoom is GateRoom ? Printer.TextType.Entrance : Printer.TextType.Narrative, $"{player.Look()}\n");
+    Console.WriteLine();
 
-    Console.Write("You hear ");
-    string weHear = $"{(player.Sound() == "the sound of silence." && player.NearPit ? "wind whispering quietly, a pit is likely to be close by." : player.Sound())}";
-    Printer.ColorPrint(player.CurrentRoom is FountainRoom ? Printer.TextType.Fountain : Printer.TextType.Narrative, $"{weHear}\n");
+    // Console.Write("You see ");
+    // Printer.ColorPrint(player.CurrentRoom is GateRoom ? Printer.TextType.Entrance : Printer.TextType.Narrative, $"{player.Look()}\n");
+
+    // Console.Write("You hear ");
+    // string weHear = $"{(player.Sound() == "the sound of silence." && player.NearPit ? "wind whispering quietly, a pit is likely to be close by." : player.Sound())}";
+    // Printer.ColorPrint(player.CurrentRoom is FountainRoom ? Printer.TextType.Fountain : Printer.TextType.Narrative, $"{weHear}\n");
     
-    Console.Write("You smell ");
-    Printer.ColorPrint(Printer.TextType.Narrative, $"{player.Smell()}\n");
+    // Console.Write("You smell ");
+    // Printer.ColorPrint(Printer.TextType.Narrative, $"{player.Smell()}\n");
 
     Console.WriteLine("\nWhat's your next move?");
 
@@ -58,28 +71,28 @@ while (true)
         case "north":
         case "n":
         case "up":
-            lastAction = player.MoveNorth() ? (Printer.TextType.Narrative, "You walk to the North...") : (Printer.TextType.Descriptive, Printer.wallBonk);
+            lastAction = player.Move('N') ? (Printer.TextType.Narrative, "You walk to the North...") : (Printer.TextType.Descriptive, Printer.wallBonk);
             break;
         case "walk east":
         case "move east":
         case "east":
         case "e":
         case "right":
-            lastAction = player.MoveEast() ? (Printer.TextType.Narrative, "You walk to the East...") : (Printer.TextType.Descriptive, Printer.wallBonk);
+            lastAction = player.Move('E') ? (Printer.TextType.Narrative, "You walk to the East...") : (Printer.TextType.Descriptive, Printer.wallBonk);
             break;
         case "walk south":
         case "move south":
         case "south":
         case "s":
         case "down":
-            lastAction = player.MoveSouth() ? (Printer.TextType.Narrative, "You walk to the South...") : (Printer.TextType.Descriptive, Printer.wallBonk);
+            lastAction = player.Move('S') ? (Printer.TextType.Narrative, "You walk to the South...") : (Printer.TextType.Descriptive, Printer.wallBonk);
             break;
         case "walk west":
         case "move west":
         case "west":
         case "w":
         case "left":
-            lastAction = player.MoveWest() ? (Printer.TextType.Narrative, "You walk to the West...") : (Printer.TextType.Descriptive, Printer.wallBonk);
+            lastAction = player.Move('W') ? (Printer.TextType.Narrative, "You walk to the West...") : (Printer.TextType.Descriptive, Printer.wallBonk);
             break;
         case "enable":
         case "toggle":

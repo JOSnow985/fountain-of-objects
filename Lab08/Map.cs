@@ -2,68 +2,71 @@
 
 public class Map
 {
-    // Layout is readonly for now
-    private readonly Room[][] _layout;
-    public Room[][] Layout => _layout;
-    private readonly List<Pit> _mapPits;
-    public List<Pit> MapPits => _mapPits;
+    public List<(Room room, int x, int y)> RoomList { get; private set; }
+    public List<List<string>> ExitsList { get; private set; }
+    public List<Obstacle> ObstaclesList { get; private set; }
+    public static GateRoom Entrance { get; } = new();
+    public static FountainRoom Fountain { get; } = new();
+    public static Room EmptyRoom { get; } = new();
 
-    public Map(string size)
+    public Map(List<(Room, int, int)> rooms, List<List<string>> exits, List<Obstacle> obstacles)
     {
-        if (size == "large")
-        {
-            _layout = largeMap;
-            _mapPits = largeMapPits;
-        }
-        else if (size == "medium")
-        {
-            _layout = mediumMap;
-            _mapPits = mediumMapPits;
-        }
-        else
-        {
-            _layout = smallMap;
-            _mapPits = smallMapPits;
-        }
+        RoomList = rooms;
+        ExitsList = exits;
+        ObstaclesList = obstacles;
     }
 
-    public readonly static List<Pit> smallMapPits = [new(3, 3)];
-    public readonly static List<Pit> mediumMapPits = [new(1, 3), new(4, 3)];
-    public readonly static List<Pit> largeMapPits = [new(2, 2), new(6, 1), new(0, 7), new(7, 6)];
+    public static Map Small => new(smallMap.rooms, smallMap.exits, smallMap.obstacles);
+    public static Map Medium => new(mediumMap.rooms, mediumMap.exits, mediumMap.obstacles);
+    public static Map Large => new(largeMap.rooms, largeMap.exits, largeMap.obstacles);
 
-    private static readonly Direction N = Direction.North;
-    private static readonly Direction E = Direction.East;
-    private static readonly Direction S = Direction.South;
-    private static readonly Direction W = Direction.West;
-
-    // This was probably not the right way to do it...
-    public readonly static Room[][] smallMap =  // 4 x 4
-        [
-            [new GateRoom([S]), new([E, S]), new FountainRoom([E, W]), new([S, W])],
-            [new([N, S]), new([N, E]), new([S, W]), new([N, S])],
-            [new([N, E, S]), new([E, W]), new(), new([N, S, W])],
-            [new([N]), new([E]), new([N, W]), new([N])],
-        ];
-    public readonly static Room[][] mediumMap = // 6 x 6
+    // Small maps are 4x4, have 1 Amarok, 1 Maelstrom, 1 Pit
+    private static (List<List<string>> exits, List<Obstacle> obstacles, List<(Room, int x, int y)> rooms) smallMap = (
     [
-        [new GateRoom([E]), new([E, W]), new([E, W]), new([E, S, W]), new([E, W]), new([S, W])],
-        [new([E]), new([E, W]), new([E, W]), new([N, W]), new([E, S]), new([N, S, W])],
-        [new([E]), new([E, S, W]), new([E, W]), new([E, S, W]), new([N, W]), new([N, S])],
-        [new([E, S]), new([N, W]), new([E, S]), new([N, S, W]), new([E]), new([N, W])],
-        [new([N, E, S]), new([E, W]), new([N, S, W]), new([N, E]), new([E, W]), new([W, S])],
-        [new([N]), new([E]), new([N, E, W]), new([E, W]), new([E, W]), new FountainRoom([N, W])]
-    ];
-public readonly static Room[][] largeMap =      // 8 x 8
-[
-        [new GateRoom([S]), new([S, E]), new([E, W]), new([E, W]), new([S, W]), new([E, S]), new([W]), new([S])],
-        [new([N, E]), new([N, W]), new([E, S]), new([E, W]), new([N, S, W]), new([N, E, S]), new([E, W]), new([N, S, W])],
-        [new([E, S]), new([E, W]), new([N, E, W]), new([S, W]), new([N, S]), new([N, E]), new([W, S]), new([N, S])],
-        [new([N, S]), new([E]), new([E, W]), new([N, W]), new([N, E, S]), new([E, W]), new([N, E, S, W]), new([N, W])],
-        [new([N, E, S]), new([E, W]), new([E, W]), new([E, S, W]), new([N, W]), new FountainRoom([S]), new([N, E, S]), new([S, W])],
-        [new([N, S]), new([S]), new(), new([N, S]), new([E, S]), new([N, W]), new([N, S]), new([N, S])],
-        [new([N, S]), new([N, E]), new([E, W]), new([N, E, W]), new([N, S, W]), new([S, E]), new([W, N]), new([N, S])],
-        [new([N, E]), new([E, W]), new([E, W]), new([E, W]), new([N, E, W]), new([N, E, W]), new([E, W]), new([N, W])]
-];
+        ["S",   "ES",   "EW",   "SW"],
+        ["NS",  "NE",   "SW",   "NS"],
+        ["NES", "EW",   "NESW", "NSW"],
+        ["N",   "E",    "NW",   "N"]
+    ],
+    [ Amarok.At(3, 0), Maelstrom.At(1, 3), Pit.At(3, 3) ],
+    [ (Entrance, 0, 0), (Fountain, 0, 2) ]
+    );
+    // Medium maps are 6x6, have 2 Amaroks, 1 Maelstrom, 2 Pits
+    private static (List<List<string>> exits, List<Obstacle> obstacles, List<(Room, int x, int y)> rooms) mediumMap = (
+    [
+        ["E",   "EW",   "EW",   "ESW",  "EW",   "SW"],
+        ["E",   "EW",   "EW",   "NW",   "ES",   "NSW"],
+        ["E",   "ESW",  "EW",   "ESW",  "NW",   "NS"],
+        ["ES",  "NW",   "ES",   "NSW",  "E",    "NW"],
+        ["NES", "EW",   "NSW",  "NE",   "EW",   "SW"],
+        ["N",   "E",    "NEW",  "EW",   "EW",   "NW"]
+    ],
+    [
+        Amarok.At(2, 2), Amarok.At(4, 4),
+        Maelstrom.At(5, 2),
+        Pit.At(1, 3), Pit.At(4, 3)
+    ],
+    [ (Entrance, 0, 0), (Fountain, 5, 5) ]
+    );
 
-    public enum Direction { North, East, South, West }
+    // Large maps are 8x8, have 3 Amaroks, 2 Maelstroms, 4 Pits
+    private static (List<List<string>> exits, List<Obstacle> obstacles, List<(Room, int x, int y)> rooms) largeMap = (
+    [
+        ["S",   "ES",   "EW",   "EW",   "SW",   "ES",   "W",    "S"],
+        ["NE",  "NW",   "ES",   "EW",   "NSW",  "NEW",  "EW",   "NSW"],
+        ["ES",  "EW",   "NEW",  "SW",   "NS",   "NE",   "SW",   "NS"],
+        ["NS",  "E",    "EW",   "NW",   "NES",  "EW",   "NESW", "NW"],
+        ["NES", "EW",   "EW",   "ESW",  "NW",   "S",    "NES",  "SW"],
+        ["NS",  "S",    "NESW", "NS",   "ES",   "NW",   "NS",   "NS"],
+        ["NS",  "NE",   "EW",   "NEW",  "NSW",  "ES",   "NW",   "NS"],
+        ["NE",  "EW",   "EW",   "EW",   "NEW",  "NEW",  "EW",   "NW"]
+    ],
+    [
+        Amarok.At(0, 3), Amarok.At(1, 5), Amarok.At(5, 7),
+        Maelstrom.At(3, 1), Maelstrom.At(4, 4),
+        Pit.At(2, 2), Pit.At(0, 7), Pit.At(6, 1), Pit.At(7, 6)
+    ],
+    [ (Entrance, 0, 0), (Fountain, 0, 2) ]
+    );
+    // public enum Direction { North, East, South, West }
 }

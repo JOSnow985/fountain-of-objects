@@ -26,6 +26,10 @@ public static class Printer
         ColorPrint(TextType.Input, "Small   Medium   Large\n");
         Console.WriteLine("Enter a selection to continue...");
     }
+    public static List<string> DivideString(string input)
+    {
+        return [.. input.Split(' ')];
+    }
     public static void OpeningCrawl()
     {
         Console.Clear();
