@@ -4,7 +4,7 @@ public static class Printer
 {
     public static readonly string wallBonk = "You bump into a wall of the cavern, you can't go that way.";
     public static readonly List<string> blueWords = ["fountain", "rushing", "dripping", "activate", "enable"];
-    public static readonly List<string> yellowWords = ["sunlit", "light"];
+    public static readonly List<string> yellowWords = ["sunlit", "light", "derezzing"];
     public static readonly List<string> redWords = ["amarok", "maelstrom", "pit", "pits", "died", "died.", "deactivated", "why?", "rotten", "stench", "growling", "groaning", "fire", "darkness", "draft", "dangers"];
     public static readonly List<string> magentaWords = ["north", "east", "south", "west", "walk", "bump", "feel", "hear", "smell", "see"];
     public static readonly List<string> cyanWords = ["you", "small", "medium", "large", "commands", "shoot", "press", "help"];
@@ -71,7 +71,7 @@ public static class Printer
         ColorPrint("--- Commands ---");
         ColorPrint("North / East / South / West : Attempt to walk that direction.");
         ColorPrint("Activate : Attempt to activate the Fountain of Objects.");
-        // ColorPrint("Fire <Direction>: Attempt to fire your bow in a direction.");
+        ColorPrint("Fire <Direction>: Attempt to fire your bow in a direction (only North, East, South, West!).");
         Console.WriteLine();
         ColorPrint("Press any key to return.");
         Console.ReadKey(true);
