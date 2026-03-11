@@ -27,7 +27,7 @@ while (true)
         }
         else
         {
-            Console.WriteLine("Please enter a map size selection!");
+            Console.WriteLine("Please enter your map size selection.");
         }
     }
 }
@@ -37,14 +37,12 @@ Player player = new(map);
 Printer.OpeningCrawl();
 Console.ReadKey(true);
 
-string lastAction = "You've entered the Cavern of Objects...";
-
 while (true)
 {
     Console.Clear();
     Console.WriteLine($"Currently at: ({player.X},{player.Y})");
 
-    Printer.ColorPrint(lastAction);
+    Printer.ColorPrint(player.lastAction);
 
     Printer.ColorPrint(player.Sense());
 
@@ -59,28 +57,28 @@ while (true)
         case "north":
         case "n":
         case "up":
-            lastAction = player.Move('N') ? "You walk to the North..." : Printer.wallBonk;
+            player.lastAction = player.Move('N') ? "You walk to the North..." : Printer.wallBonk;
             break;
         case "walk east":
         case "move east":
         case "east":
         case "e":
         case "right":
-            lastAction = player.Move('E') ? "You walk to the East..." : Printer.wallBonk;
+            player.lastAction = player.Move('E') ? "You walk to the East..." : Printer.wallBonk;
             break;
         case "walk south":
         case "move south":
         case "south":
         case "s":
         case "down":
-            lastAction = player.Move('S') ? "You walk to the South..." : Printer.wallBonk;
+            player.lastAction = player.Move('S') ? "You walk to the South..." : Printer.wallBonk;
             break;
         case "walk west":
         case "move west":
         case "west":
         case "w":
         case "left":
-            lastAction = player.Move('W') ? "You walk to the West..." : Printer.wallBonk;
+            player.lastAction = player.Move('W') ? "You walk to the West..." : Printer.wallBonk;
             break;
         case "enable":
         case "toggle":
@@ -91,10 +89,10 @@ while (true)
             if (player.CurrentRoom is FountainRoom)
             {
                 Map.Fountain.ToggleFountain();
-                lastAction = Map.Fountain.IsFountainEnabled ? "You have activated the Fountain of Objects!" : "You have deactivated the Fountain of Objects... why?";
+                player.lastAction = Map.Fountain.IsFountainEnabled ? "You have activated the Fountain of Objects!" : "You have deactivated the Fountain of Objects... why?";
             }
             else
-                lastAction = "There's nothing to enable here...";
+                player.lastAction = "There's nothing to enable here...";
             break;
         case "help":
             Printer.HelpMenu();
@@ -110,10 +108,10 @@ while (true)
                 return;
             }
             else
-                lastAction = "You can't leave unless you're at the entrance...";
+                player.lastAction = "You can't leave unless you're at the entrance...";
             break;
         default:
-            lastAction = "The Rules of the Cavern prevent you from doing... that.";
+            player.lastAction = "The Rules of the Cavern prevent you from doing... that.";
             break;
     }
     // Return text color to white just in case

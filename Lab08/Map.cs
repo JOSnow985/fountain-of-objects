@@ -8,12 +8,15 @@ public class Map
     public static GateRoom Entrance { get; } = new();
     public static FountainRoom Fountain { get; } = new();
     public static Room EmptyRoom { get; } = new();
+    private static (int X, int Y) _boundary = (3, 3); // Small Map is the max dimension
+    public static (int X, int Y) Boundary => _boundary;
 
     public Map(List<(Room, int, int)> rooms, List<List<string>> exits, List<Obstacle> obstacles)
     {
         RoomList = rooms;
         ExitsList = exits;
         ObstaclesList = obstacles;
+        _boundary.X = _boundary.Y = exits.Count - 1;    // Maps are square right now but could be different later?
     }
 
     public static Map Small => new(smallMap.rooms, smallMap.exits, smallMap.obstacles);
