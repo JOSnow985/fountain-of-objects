@@ -69,7 +69,7 @@ public class Map
         Maelstrom.At(3, 1), Maelstrom.At(4, 4),
         Pit.At(2, 2), Pit.At(0, 7), Pit.At(6, 1), Pit.At(7, 6)
     ],
-    [ (Entrance, 0, 0), (Fountain, 0, 2) ]
+    [ (Entrance, 0, 0), (Fountain, 5, 4) ]
     );
     // public enum Direction { North, East, South, West }
 }
